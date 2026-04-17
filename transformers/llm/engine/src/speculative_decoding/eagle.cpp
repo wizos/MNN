@@ -286,7 +286,8 @@ EagleGeneration::DraftInfo EagleGeneration::updateDraft(const AcceptInfo& accept
         mLlm->updateContext(acceptLen, acceptLen);
         mLlm->mMeta->remove = acceptInfo.sampleTokens.size();
         mLlm->mMeta->n_reserve = acceptLen;
-        mLlm->mMeta->reserve = new int[mLlm->mMeta->n_reserve * 2];
+        mLlm->mMeta->reserveHost.resize(acceptLen * 2);
+        mLlm->mMeta->reserve = mLlm->mMeta->reserveHost.data();
         for (size_t i = 0; i < acceptLen; i++) {
             mLlm->mMeta->reserve[2 * i] = acceptInfo.acceptIndices[i];
             mLlm->mMeta->reserve[2 * i + 1] = 1;
