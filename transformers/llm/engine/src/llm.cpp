@@ -1417,7 +1417,7 @@ VARP Llm::gen_attention_mask(int seq_len) {
             if(seq_len == 1) {
                 return mAttentionMaskVarVec[0];
             }
-            if (mAttentionMaskVarVec.size() > 1 && seq_len == mDraftLength) {
+            if (mAttentionMaskVarVec.size() > 1 && seq_len == mDraftLength + 1) {
                 return mAttentionMaskVarVec[1];
             }
         }
@@ -1498,7 +1498,7 @@ VARP Llm::gen_position_ids(int seq_len) {
             }
             return mPositionIdsVarVec[0];
         }
-        if(mPositionIdsVarVec.size() > 1 && seq_len == mDraftLength) {
+        if (mPositionIdsVarVec.size() > 1 && seq_len == mDraftLength + 1) {
             auto ptr = mPositionIdsVarVec[1]->writeMap<int>();
             for (int i = 0; i < seq_len; i++) {
                 ptr[i] = i + mContext->all_seq_len;

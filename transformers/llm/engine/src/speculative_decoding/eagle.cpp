@@ -217,9 +217,19 @@ EagleGeneration::DraftInfo EagleGeneration::topkGenerate(const std::vector<int>&
             info.attentionMask->writeMap<float>()[i * inputLen + j] = output.attentionMask[i][j] ? 0.0 : std::numeric_limits<float>::lowest();
         }
     }
-    info.positionIds = _Input({1, inputLen}, NCHW, halide_type_of<int>());
-    for (int i = 0; i < inputLen; i++) {
-        info.positionIds->writeMap<int>()[i] = seqLen + output.positionIds[i];
+    if (mLlm->mConfig->is_mrope()) {
+        info.positionIds = _Input({3, inputLen}, NCHW, halide_type_of<int>());
+        for (int i = 0; i < inputLen; i++) {
+            int pos = seqLen + output.positionIds[i];
+            info.positionIds->writeMap<int>()[i] = pos;
+            info.positionIds->writeMap<int>()[inputLen + i] = pos;
+            info.positionIds->writeMap<int>()[2 * inputLen + i] = pos;
+        }
+    } else {
+        info.positionIds = _Input({1, inputLen}, NCHW, halide_type_of<int>());
+        for (int i = 0; i < inputLen; i++) {
+            info.positionIds->writeMap<int>()[i] = seqLen + output.positionIds[i];
+        }
     }
     return info;
 }
