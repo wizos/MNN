@@ -68,11 +68,12 @@ list(APPEND MNN_CPP_TOOLS testTrain.out)
 add_executable(fuseTest ${CMAKE_CURRENT_LIST_DIR}/fuseTest.cpp)
 list(APPEND MNN_CPP_TOOLS fuseTest)
 
-add_executable(generateIO ${CMAKE_CURRENT_LIST_DIR}/generateIO.cpp)
-list(APPEND MNN_CPP_TOOLS generateIO)
-
-add_executable(MNN2QNNModel ${CMAKE_CURRENT_LIST_DIR}/MNN2QNNModel.cpp)
-list(APPEND MNN_CPP_TOOLS MNN2QNNModel)
+if (MNN_QNN)
+    add_executable(generateIO ${CMAKE_CURRENT_LIST_DIR}/generateIO.cpp)
+    list(APPEND MNN_CPP_TOOLS generateIO)
+    add_executable(MNN2QNNModel ${CMAKE_CURRENT_LIST_DIR}/MNN2QNNModel.cpp)
+    list(APPEND MNN_CPP_TOOLS MNN2QNNModel)
+endif()
 
 endif()
 
