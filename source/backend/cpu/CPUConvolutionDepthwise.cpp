@@ -17,6 +17,7 @@
 
 #ifdef MNN_KLEIDIAI_ENABLED
 #include "backend/cpu/KleidiAIConvolutionDepthwise.hpp"
+#include "backend/cpu/CPURuntime.hpp"
 #endif //MNN_KLEIDIAI_ENABLED
 
 namespace MNN {
@@ -292,7 +293,7 @@ public:
                             strideY ==1 && strideX ==1 && 
                             dilateX ==1 && dilateY ==1 &&
                             bytes == 4;
-        useKleidiAI = backend->getRuntime()->hint().enableKleidiAI && useKleidiAI;
+        useKleidiAI = backend->getRuntime()->hint().enableKleidiAI && MNNGetCPUInfo()->sme2 && useKleidiAI;
         if(useKleidiAI) {
             return new KleidiAIConvolutionDepthwise::KleidiAIDepthwiseExecution(conv2d->common(), backend, originWeight, originWeightSize, originBias, originBiasSize);
         }
